@@ -1,13 +1,13 @@
 ---
 title: "Neural Networks"
-author: "Charles Lang"
-date: "1/28/2018"
+author: "Nicole Schlosberg"
+date: "3/7/2021"
 output: html_document
 ---
 
 ## Part I - Introduction to Using Neural Nets
 
-In the attached data sets attention1.csv and attention2.csv, you will find data that describe features assocaited with webcam images of 100 students' faces as they particpate in an online discussion. The variables are:
+In the attached data sets attention1.csv and attention2.csv, you will find data that describe features associated with webcam images of 100 students' faces as they participate in an online discussion. The variables are:
 
 eyes - student has their eyes open (1 = yes, 0 = no)
 face.forward - student is facing the camera (1 = yes, 0 = no)
@@ -23,15 +23,14 @@ We will use the webcam data to build a neural net to predict whether or not a st
 
 First install and load the neuralnet package
 ```{r}
-install.packages("neuralnet")
 library(neuralnet)
+library(caret)
 ```
 
 Now upload your data
 ```{r}
-D1 <- 
-  
-D2 <- 
+D1 <- read.csv("attention1.csv",header=TRUE)
+D2 <- read.csv("attention2.csv",header=TRUE)
 ```
 
 Now you can build a neural net that predicts attention based on webcam images. The command "neuralnet" sets up the model. It is composed of four basic arguments:
@@ -50,17 +49,33 @@ plot(nn)
 
 #The option "learningrate" alters the size of the steps the model takes every time it adjusts the weights.
 
-#Change the hidden layers and learningrate options and check both the prediction accuracy 
+#Change the hidden layers and learningrate options and check both the prediction accuracy ##test this out later in the code
 ```
 
-You have now trained a neural network! The plot shows you the layers of your newtork as black nodes and edges with the calculated weights on each edge. The blue nodes and edges are the bias/threshold terms - it is a little bit confusing that they are represented as nodes, they are not nodes in the sense that the black nodes are. The bias anchors the activation function, the weights change the shape of the activation function while the bias term changes the overall position of the activation function - if you have used linear regression the bias term is like the intercept of the regression equation, it shifts the trend line up and down the y axis, while the other parameters change the angle of the line. The plot also reports the final error rate and the number of iterations ("steps") that it took to reach these weights.
+You have now trained a neural network! The plot shows you the layers of your network as black nodes and edges with the calculated weights on each edge. The blue nodes and edges are the bias/threshold terms - it is a little bit confusing that they are represented as nodes, they are not nodes in the sense that the black nodes are. The bias anchors the activation function, the weights change the shape of the activation function while the bias term changes the overall position of the activation function - if you have used linear regression the bias term is like the intercept of the regression equation, it shifts the trend line up and down the y axis, while the other parameters change the angle of the line. The plot also reports the final error rate and the number of iterations ("steps") that it took to reach these weights.
 
-What happens if you increase the number of hidden layers in the neural net? Build a second neural net with more or fewer layers in it and determine if this improves your predictions or not? How can you tell if your new neural network is doing a better job than your first?
+What happens if you increase the number of hidden layers in the neural net? 
+
+```{r}
+nn1 <- neuralnet(attention == 1 ~ eyes + face.forward + chin.up + squint + hunch + mouth1 + mouth2 + mouth3, D1, hidden = c(10,10), learningrate = 0.2)
+plot(nn1)
+```
+
+ANSWER: If you increase the number of hidden layers in the neural net, the final error rate decreases as does the number of iterations or "steps" that it took to reach these weights.
+
+Build a second neural net with more or fewer layers in it and determine if this improves your predictions or not? How can you tell if your new neural network is doing a better job than your first?
+
+```{r}
+nn2 <- neuralnet(attention == 1 ~ eyes + face.forward + chin.up + squint + hunch + mouth1 + mouth2 + mouth3, D1, hidden = c(1,1), learningrate = 0.2)
+
+plot(nn2)
+```
+ANSWER: This neural network with one hidden layer does a worse job at predicting. With fewer hidden layers the prediction final error rate increased. This would mean that with fewer hidden layers the neural network is open to more error. With one hidden layer the error is 3.5586 and with two hidden layers the error is 0.9105. The first model with more hidden layers has a better prediction for student attention.
 
 Now use your preferred neural net to predict the second data set. You will need to create a new data frame (D3) that only includes the input layers to use this command.
 
 ```{r}
-D3 <- 
+D3 <- D2[,-4]
 ```
 
 Now you can create predictions using your neural net
@@ -68,22 +83,66 @@ Now you can create predictions using your neural net
 #The code below will use your model to predict the outcome using D3 data
 pred <- predict(nn, D3)
 
-#The code below will tell you how accurate your model is att predicting the unseen data
-table(D2$attention == 1, pred[, 1] > 0.5)
+#The code below will tell you how accurate your model is at predicting the unseen data
+table <- table(D2$attention == 1, pred[, 1] > 0.5)
+plot(nn)
+table
+```
 
-#Adjust both the hidden layer and lerarning rate and see if that has an impact on error, steps and prediction accuracy
+Adjust both the hidden layer and learningrate and see if that has an impact on error, steps and prediction accuracy: When hidden layer and learningrate are increased the final error rate and "steps" both decrease. The number of TP increased (61 to 62) and the number of TN decreased (35 to 34); the number of FP decreased (2 to 1), and the number of FN increased (2 to 3).
+```{r}
+#Increased the hidden layer and increased the learngingrate
+nn6 <- neuralnet(attention == 1 ~ eyes + face.forward + chin.up + squint + hunch + mouth1 + mouth2 + mouth3, D1, hidden = c(4,4), learningrate = 0.9)
+pred6 <- predict(nn6, D3)
+table6 <- table(D2$attention == 1, pred6[, 1] > 0.5)
+plot(nn6)
+table6
+```
 
-
+Finding metrics on prediction of the neural network for the second data set
+```{r}
+D2$attention = as.factor(D2$attention) 
+D2$pred <- round(pred, digits=0)
+D2$pred = as.factor(D2$pred) 
+confusionMatrix(data=D2$pred, D2$attention)
 ```
 
 ## Please answer the following questions:
 
 1. How accurate is your neural net? How can you tell?
 
+ANSWER: When you run the metrics using the confusion matrix and statistics on the neural net, the model's accuracy is at 98%. The sensitivity (true positive rate) is at 1.00, indicating that the rate correct classification of a students paying attention is 100%, and the specificity (true negative rate) is at 0.9683, suggesting that the rate correct classification of a students not paying attention is 96.83%. This means that the model is good at accounting for true positives and true negatives.
+
 2. How would you explain your model to the students whose behavior you are predicting? 
 
+ANSWER: I would explain that each on of the input data (eyes, face.forward, chin.up, squint, hunch, mouth1, mouth2, mouth3) tell us whether they are paying attention. So if they they are facing forward (1) then that shows one aspect of paying attention. If their chin is up (1) then we have another factor that shows they are paying attention. If there are enough of these factors (inputs) that represent paying attention then the model will meet its threshold. In other words, it will pass an inspection that meets the qualifications for paying attention. The prediction metrics shows how well this model is at predicting those that are paying attention are actually paying attention and those that are not paying attention are in fact not paying attention.
+
 3. This is a very simple example of a neural network. Real facial recognition is very complex though. Would a neural network be a good solution for predicting real facial movements? Why, why not? 
+
+ANSWER: Using a neural network for real facial recognition would be very flawed. Human facial expression is very diverse. We might all have the same facial emotions, but how we actually present them or hold our selves can be very different both culturally and simply genentics. These vast array of facial nuances are likely not going to be able to be accounted by a simple neural network model, thus many of such nuances will get lost and not recognized. Thus the prediction would be wildly off.
 
 ## Repeat with your own data
 
 Either synthesize a data set or find a data set online and build a neural net to predict a binary outcome from several inputs. Split your data into two sets and use one set to train the neural net and the other set to make predictions. Change the hidden layers and learning rate until you get the most accurate model you can.
+
+```{r}
+# creating training data set (Yes=1;No=0)
+mouthFrowning <- c(1,1,0,0,1,1,0,1,0,1)
+eyesSquinting <- c(1,1,0,1,1,0,0,0,1,1)
+browFurrowed <- c(1,1,1,1,1,0,1,0,1,0) 
+feelingSad <- c(1,1,0,0,1,0,0,0,0,1) #Are the students feeling sad?
+S1 <- data.frame(mouthFrowning,eyesSquinting,browFurrowed,feelingSad)
+ss <- neuralnet(feelingSad == 1 ~ mouthFrowning + eyesSquinting + browFurrowed, S1, hidden = 4, learningrate = 0.5)
+plot(ss)
+
+#testing data for prediction
+S2 <- S1[,-feelingSad]
+preds <- predict(ss, S2)
+tables <- table(S1$feelingSad == 1, preds[, 1] > 0.5)
+
+S1$feelingSad = as.factor(S1$feelingSad) 
+S1$preds <- round(preds, digits=0)
+S1$preds = as.factor(S1$preds) 
+confusionMatrix(data=S1$preds, S1$feelingSad)
+```
+Here we get accuracy of 80%, specificity at 100%, and sensitivity at 66.67%. The sensitivity could be better but this is the best it could be with this model. Final error rate is less than .01% and the number of steps is at 71.
