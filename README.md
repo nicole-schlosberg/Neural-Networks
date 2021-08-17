@@ -10,9 +10,7 @@ Neural networks are not a new method, the first artificial neural network was de
 * Be able to explain the backpropagation algorithm
 * Be able to build a basic neural network to solve a prediction problem
 
-## Resources
-
-### Videos
+## Utilized the following resources
 
 [![Introduction to Neural Networks](https://img.youtube.com/vi/x54ULLJSzBM/0.jpg)](https://youtu.be/x54ULLJSzBM)
 
@@ -21,8 +19,6 @@ Neural networks are not a new method, the first artificial neural network was de
 [Sanderson, G. (2017). But what *is* a Neural Network? 3Blue1Brown. ](https://www.youtube.com/watch?v=aircAruvnKk)
 
 [Bling, S. (2017). MariFlow - Self-Driving Mario Kart with Recurrent Neural Network](https://www.youtube.com/watch?v=Ipi40cb_RsI)
-
-###  Readings
 
 Nielsen, M. (2015). Neural Networks & Deep Learning. Determination Press:San Francisco, CA  
   [Chapter 1](http://neuralnetworksanddeeplearning.com/chap1.html)  
