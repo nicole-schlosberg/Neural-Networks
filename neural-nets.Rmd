@@ -7,18 +7,6 @@ output: html_document
 
 ## Part I - Introduction to Using Neural Nets
 
-In the attached data sets attention1.csv and attention2.csv, you will find data that describe features associated with webcam images of 100 students' faces as they participate in an online discussion. The variables are:
-
-eyes - student has their eyes open (1 = yes, 0 = no)
-face.forward - student is facing the camera (1 = yes, 0 = no)
-chin.up - student's chin is raised above 45 degrees (1 = yes, 0 = no)
-squint - eyes are squinting
-hunch - shoulders are hunched over
-mouth1 - mouth is smiling
-mouth2 - mouth is frowning
-mouth3 - mouth is open
-attention - whether the student was paying attention when asked (1 = yes, 0 = no)
-
 We will use the webcam data to build a neural net to predict whether or not a student is attending.
 
 First install and load the neuralnet package
@@ -52,7 +40,7 @@ plot(nn)
 #Change the hidden layers and learningrate options and check both the prediction accuracy ##test this out later in the code
 ```
 
-You have now trained a neural network! The plot shows you the layers of your network as black nodes and edges with the calculated weights on each edge. The blue nodes and edges are the bias/threshold terms - it is a little bit confusing that they are represented as nodes, they are not nodes in the sense that the black nodes are. The bias anchors the activation function, the weights change the shape of the activation function while the bias term changes the overall position of the activation function - if you have used linear regression the bias term is like the intercept of the regression equation, it shifts the trend line up and down the y axis, while the other parameters change the angle of the line. The plot also reports the final error rate and the number of iterations ("steps") that it took to reach these weights.
+The plot shows you the layers of your network as black nodes and edges with the calculated weights on each edge. The blue nodes and edges are the bias/threshold terms - it is a little bit confusing that they are represented as nodes, they are not nodes in the sense that the black nodes are. The bias anchors the activation function, the weights change the shape of the activation function while the bias term changes the overall position of the activation function - if you have used linear regression the bias term is like the intercept of the regression equation, it shifts the trend line up and down the y axis, while the other parameters change the angle of the line. The plot also reports the final error rate and the number of iterations ("steps") that it took to reach these weights.
 
 What happens if you increase the number of hidden layers in the neural net? 
 

@@ -10,6 +10,28 @@ Neural networks are not a new method, the first artificial neural network was de
 * Be able to explain the backpropagation algorithm
 * Be able to build a basic neural network to solve a prediction problem
 
+## Reflection on my neural network
+
+*How accurate is your neural net? How can you tell?* When you run the metrics using the confusion matrix and statistics on the neural net, the model's accuracy is at 98%. The sensitivity (true positive rate) is at 1.00, indicating that the rate correct classification of a students paying attention is 100%, and the specificity (true negative rate) is at 0.9683, suggesting that the rate correct classification of a students not paying attention is 96.83%. This means that the model is good at accounting for true positives and true negatives.
+
+*How would you explain your model to the students whose behavior you are predicting?* I would explain that each on of the input data (eyes, face.forward, chin.up, squint, hunch, mouth1, mouth2, mouth3) tell us whether they are paying attention. So if they they are facing forward (1) then that shows one aspect of paying attention. If their chin is up (1) then we have another factor that shows they are paying attention. If there are enough of these factors (inputs) that represent paying attention then the model will meet its threshold. In other words, it will pass an inspection that meets the qualifications for paying attention. The prediction metrics shows how well this model is at predicting those that are paying attention are actually paying attention and those that are not paying attention are in fact not paying attention.
+
+*This is a very simple example of a neural network. Real facial recognition is very complex though. Would a neural network be a good solution for predicting real facial movements? Why, why not?* Using a neural network for real facial recognition would be very flawed. Human facial expression is very diverse. We might all have the same facial emotions, but how we actually present them or hold our selves can be very different both culturally and simply genentics. These vast array of facial nuances are likely not going to be able to be accounted by a simple neural network model, thus many of such nuances will get lost and not recognized. Thus the prediction would be wildly off.
+
+## Codebook
+
+In the attached data sets attention1.csv and attention2.csv, you will find data that describe features associated with webcam images of 100 students' faces as they participate in an online discussion. The variables are:
+
+eyes - student has their eyes open (1 = yes, 0 = no)
+face.forward - student is facing the camera (1 = yes, 0 = no)
+chin.up - student's chin is raised above 45 degrees (1 = yes, 0 = no)
+squint - eyes are squinting
+hunch - shoulders are hunched over
+mouth1 - mouth is smiling
+mouth2 - mouth is frowning
+mouth3 - mouth is open
+attention - whether the student was paying attention when asked (1 = yes, 0 = no)
+
 ## Utilized the following resources
 
 [![Introduction to Neural Networks](https://img.youtube.com/vi/x54ULLJSzBM/0.jpg)](https://youtu.be/x54ULLJSzBM)
